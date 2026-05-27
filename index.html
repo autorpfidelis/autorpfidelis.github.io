@@ -1,0 +1,923 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Apologética Cristã — Projeto Veritas</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700;900&family=Cinzel+Decorative:wght@400;700&family=Lato:ital,wght@0,300;0,400;0,700;1,300;1,400&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --gold: #C9A84C;
+    --gold-light: #E8C97A;
+    --gold-dim: #8B6914;
+    --black: #0A0A0A;
+    --dark: #111008;
+    --dark-card: #141209;
+    --dark-mid: #1C1810;
+    --white: #F5F0E8;
+    --white-dim: #A89E88;
+    --teal: #2A6B6E;
+    --teal-light: #3D9EA3;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background-color: var(--dark);
+    color: var(--white);
+    font-family: 'Lato', serif;
+    overflow-x: hidden;
+  }
+
+  /* ── NOISE TEXTURE OVERLAY ── */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 0;
+    opacity: 0.6;
+  }
+
+  /* ── HERO ── */
+  .hero {
+    position: relative;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 4rem 2rem;
+    overflow: hidden;
+  }
+
+  .hero-bg {
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(ellipse 80% 60% at 50% 0%, rgba(201,168,76,0.08) 0%, transparent 70%),
+      radial-gradient(ellipse 60% 40% at 20% 100%, rgba(42,107,110,0.06) 0%, transparent 60%),
+      radial-gradient(ellipse 40% 60% at 80% 50%, rgba(201,168,76,0.04) 0%, transparent 60%),
+      linear-gradient(180deg, #0A0802 0%, #111008 50%, #0D0D0A 100%);
+  }
+
+  .hero-lines {
+    position: absolute;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(201,168,76,0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(201,168,76,0.03) 1px, transparent 1px);
+    background-size: 80px 80px;
+  }
+
+  .hero-content { position: relative; z-index: 1; max-width: 860px; }
+
+  .ornament {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+    margin-bottom: 2rem;
+    opacity: 0;
+    animation: fadeUp 1s ease forwards 0.2s;
+  }
+
+  .ornament-line {
+    height: 1px;
+    width: 60px;
+    background: linear-gradient(90deg, transparent, var(--gold));
+  }
+  .ornament-line.right {
+    background: linear-gradient(90deg, var(--gold), transparent);
+  }
+
+  .ornament-symbol {
+    color: var(--gold);
+    font-size: 1.2rem;
+    letter-spacing: 0.3em;
+    font-family: 'Cinzel', serif;
+    font-weight: 400;
+  }
+
+  .hero-label {
+    font-family: 'Cinzel', serif;
+    font-size: 0.75rem;
+    letter-spacing: 0.4em;
+    color: var(--gold);
+    text-transform: uppercase;
+    margin-bottom: 1.5rem;
+    opacity: 0;
+    animation: fadeUp 1s ease forwards 0.4s;
+  }
+
+  .hero-title {
+    font-family: 'Cinzel Decorative', serif;
+    font-size: clamp(2.4rem, 6vw, 5rem);
+    font-weight: 700;
+    line-height: 1.1;
+    letter-spacing: 0.02em;
+    margin-bottom: 1rem;
+    opacity: 0;
+    animation: fadeUp 1s ease forwards 0.6s;
+  }
+
+  .hero-title span {
+    background: linear-gradient(135deg, var(--gold-light) 0%, var(--gold) 50%, var(--gold-dim) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .hero-subtitle {
+    font-family: 'Cinzel', serif;
+    font-size: clamp(1rem, 2.5vw, 1.4rem);
+    font-weight: 400;
+    color: var(--white-dim);
+    letter-spacing: 0.15em;
+    margin-bottom: 2.5rem;
+    opacity: 0;
+    animation: fadeUp 1s ease forwards 0.8s;
+  }
+
+  .hero-verse {
+    font-family: 'Lato', serif;
+    font-style: italic;
+    font-size: 1rem;
+    color: var(--white-dim);
+    line-height: 1.8;
+    max-width: 520px;
+    margin: 0 auto 3rem;
+    padding: 1.5rem 2rem;
+    border-left: 2px solid var(--gold);
+    border-right: 2px solid var(--gold);
+    position: relative;
+    opacity: 0;
+    animation: fadeUp 1s ease forwards 1s;
+  }
+
+  .hero-verse::before, .hero-verse::after {
+    content: '';
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 40px;
+    height: 1px;
+    background: var(--gold);
+  }
+  .hero-verse::before { top: 0; }
+  .hero-verse::after { bottom: 0; }
+
+  .hero-verse cite {
+    display: block;
+    font-style: normal;
+    font-size: 0.8rem;
+    letter-spacing: 0.2em;
+    color: var(--gold);
+    margin-top: 0.75rem;
+    font-family: 'Cinzel', serif;
+  }
+
+  .scroll-indicator {
+    position: absolute;
+    bottom: 2rem;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+    opacity: 0;
+    animation: fadeUp 1s ease forwards 1.4s;
+  }
+
+  .scroll-indicator span {
+    font-family: 'Cinzel', serif;
+    font-size: 0.65rem;
+    letter-spacing: 0.3em;
+    color: var(--gold-dim);
+  }
+
+  .scroll-arrow {
+    width: 1px;
+    height: 40px;
+    background: linear-gradient(180deg, var(--gold), transparent);
+    animation: scrollPulse 2s ease infinite;
+  }
+
+  /* ── SECTIONS ── */
+  section {
+    position: relative;
+    z-index: 1;
+    padding: 6rem 2rem;
+  }
+
+  .container {
+    max-width: 1000px;
+    margin: 0 auto;
+  }
+
+  .section-header {
+    text-align: center;
+    margin-bottom: 4rem;
+  }
+
+  .section-tag {
+    font-family: 'Cinzel', serif;
+    font-size: 0.7rem;
+    letter-spacing: 0.5em;
+    color: var(--gold);
+    text-transform: uppercase;
+    display: block;
+    margin-bottom: 1rem;
+  }
+
+  .section-title {
+    font-family: 'Cinzel', serif;
+    font-size: clamp(1.6rem, 4vw, 2.8rem);
+    font-weight: 700;
+    line-height: 1.2;
+    color: var(--white);
+    margin-bottom: 1rem;
+  }
+
+  .section-title em {
+    font-style: normal;
+    color: var(--gold);
+  }
+
+  .section-divider {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+    margin-top: 1.5rem;
+  }
+
+  .section-divider::before,
+  .section-divider::after {
+    content: '';
+    height: 1px;
+    width: 80px;
+    background: linear-gradient(90deg, transparent, var(--gold-dim));
+  }
+  .section-divider::after {
+    background: linear-gradient(90deg, var(--gold-dim), transparent);
+  }
+
+  .section-divider span {
+    color: var(--gold);
+    font-size: 0.8rem;
+  }
+
+  /* ── WHAT IS APOLOGETICS ── */
+  .what-is {
+    background: linear-gradient(180deg, var(--dark) 0%, var(--dark-mid) 50%, var(--dark) 100%);
+  }
+
+  .what-is-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 3rem;
+    align-items: center;
+    margin-bottom: 4rem;
+  }
+
+  .what-is-text p {
+    font-size: 1.05rem;
+    line-height: 1.9;
+    color: var(--white-dim);
+    margin-bottom: 1.5rem;
+    font-weight: 300;
+  }
+
+  .what-is-text p strong {
+    color: var(--white);
+    font-weight: 700;
+  }
+
+  .what-is-text p em {
+    color: var(--gold);
+    font-style: italic;
+  }
+
+  .highlight-box {
+    background: linear-gradient(135deg, rgba(201,168,76,0.06) 0%, rgba(42,107,110,0.04) 100%);
+    border: 1px solid rgba(201,168,76,0.2);
+    border-radius: 2px;
+    padding: 2rem;
+    position: relative;
+  }
+
+  .highlight-box::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0;
+    width: 3px;
+    height: 100%;
+    background: linear-gradient(180deg, var(--gold), var(--teal-light));
+  }
+
+  .highlight-box blockquote {
+    font-family: 'Lato', serif;
+    font-style: italic;
+    font-size: 1.1rem;
+    line-height: 1.8;
+    color: var(--white);
+    margin-bottom: 1rem;
+  }
+
+  .highlight-box cite {
+    font-family: 'Cinzel', serif;
+    font-size: 0.75rem;
+    letter-spacing: 0.2em;
+    color: var(--gold);
+    font-style: normal;
+  }
+
+  /* ── PILLARS ── */
+  .pillars-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.5rem;
+    margin-top: 3rem;
+  }
+
+  .pillar-card {
+    background: var(--dark-card);
+    border: 1px solid rgba(201,168,76,0.12);
+    padding: 2rem 1.5rem;
+    position: relative;
+    transition: border-color 0.3s ease, transform 0.3s ease;
+  }
+
+  .pillar-card:hover {
+    border-color: rgba(201,168,76,0.4);
+    transform: translateY(-4px);
+  }
+
+  .pillar-card::after {
+    content: '';
+    position: absolute;
+    bottom: 0; left: 0;
+    width: 0;
+    height: 2px;
+    background: linear-gradient(90deg, var(--gold), var(--teal-light));
+    transition: width 0.4s ease;
+  }
+
+  .pillar-card:hover::after { width: 100%; }
+
+  .pillar-number {
+    font-family: 'Cinzel Decorative', serif;
+    font-size: 2.5rem;
+    color: rgba(201,168,76,0.15);
+    line-height: 1;
+    margin-bottom: 1rem;
+  }
+
+  .pillar-title {
+    font-family: 'Cinzel', serif;
+    font-size: 0.9rem;
+    letter-spacing: 0.2em;
+    color: var(--gold);
+    text-transform: uppercase;
+    margin-bottom: 1rem;
+  }
+
+  .pillar-text {
+    font-size: 0.9rem;
+    line-height: 1.8;
+    color: var(--white-dim);
+    font-weight: 300;
+  }
+
+  /* ── VOICES ── */
+  .voices {
+    background: var(--dark-mid);
+  }
+
+  .voices-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2rem;
+    margin-top: 1rem;
+  }
+
+  .voice-card {
+    background: var(--dark-card);
+    border: 1px solid rgba(201,168,76,0.1);
+    padding: 2.5rem;
+    position: relative;
+    transition: border-color 0.3s ease;
+  }
+
+  .voice-card:hover { border-color: rgba(201,168,76,0.3); }
+
+  .voice-card.featured {
+    grid-column: 1 / -1;
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    gap: 2rem;
+    border-color: rgba(201,168,76,0.25);
+  }
+
+  .voice-identity { }
+
+  .voice-name {
+    font-family: 'Cinzel', serif;
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: var(--white);
+    margin-bottom: 0.3rem;
+  }
+
+  .voice-dates {
+    font-family: 'Cinzel', serif;
+    font-size: 0.7rem;
+    letter-spacing: 0.2em;
+    color: var(--gold);
+    margin-bottom: 0.75rem;
+  }
+
+  .voice-role {
+    font-size: 0.8rem;
+    color: var(--white-dim);
+    line-height: 1.6;
+    margin-bottom: 1.5rem;
+    font-weight: 300;
+  }
+
+  .voice-tag {
+    display: inline-block;
+    font-family: 'Cinzel', serif;
+    font-size: 0.6rem;
+    letter-spacing: 0.25em;
+    color: var(--teal-light);
+    border: 1px solid var(--teal);
+    padding: 0.3rem 0.75rem;
+    text-transform: uppercase;
+  }
+
+  .voice-quote {
+    font-style: italic;
+    font-size: 0.95rem;
+    line-height: 1.85;
+    color: var(--white-dim);
+    border-left: 2px solid var(--gold-dim);
+    padding-left: 1.25rem;
+    margin-top: 0.5rem;
+  }
+
+  .voice-card:not(.featured) .voice-quote {
+    margin-top: 1.5rem;
+    font-size: 0.88rem;
+  }
+
+  /* ── AMAZING GRACE ── */
+  .grace-section {
+    background: linear-gradient(180deg, var(--dark) 0%, #0A0A06 100%);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .grace-section::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--gold-dim), transparent);
+  }
+
+  .grace-content {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 4rem;
+    align-items: start;
+  }
+
+  .grace-text h3 {
+    font-family: 'Cinzel', serif;
+    font-size: 0.7rem;
+    letter-spacing: 0.5em;
+    color: var(--gold);
+    text-transform: uppercase;
+    margin-bottom: 1rem;
+  }
+
+  .grace-text h2 {
+    font-family: 'Cinzel', serif;
+    font-size: clamp(1.4rem, 3vw, 2rem);
+    font-weight: 700;
+    line-height: 1.3;
+    color: var(--white);
+    margin-bottom: 2rem;
+  }
+
+  .grace-text p {
+    font-size: 1rem;
+    line-height: 1.9;
+    color: var(--white-dim);
+    margin-bottom: 1.25rem;
+    font-weight: 300;
+  }
+
+  .grace-text p strong { color: var(--white); }
+  .grace-text p em { color: var(--gold); font-style: italic; }
+
+  .grace-timeline {
+    position: relative;
+    padding-left: 2rem;
+  }
+
+  .grace-timeline::before {
+    content: '';
+    position: absolute;
+    left: 0; top: 0; bottom: 0;
+    width: 1px;
+    background: linear-gradient(180deg, var(--gold), var(--teal), transparent);
+  }
+
+  .timeline-item {
+    position: relative;
+    padding-bottom: 2.5rem;
+  }
+
+  .timeline-item::before {
+    content: '';
+    position: absolute;
+    left: -2.35rem;
+    top: 0.4rem;
+    width: 8px;
+    height: 8px;
+    background: var(--gold);
+    border-radius: 50%;
+    box-shadow: 0 0 12px rgba(201,168,76,0.5);
+  }
+
+  .timeline-year {
+    font-family: 'Cinzel', serif;
+    font-size: 0.7rem;
+    letter-spacing: 0.3em;
+    color: var(--gold);
+    margin-bottom: 0.4rem;
+  }
+
+  .timeline-title {
+    font-family: 'Cinzel', serif;
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: var(--white);
+    margin-bottom: 0.5rem;
+  }
+
+  .timeline-text {
+    font-size: 0.88rem;
+    line-height: 1.7;
+    color: var(--white-dim);
+    font-weight: 300;
+  }
+
+  /* ── CALL TO ACTION ── */
+  .cta-section {
+    background: var(--dark-mid);
+    text-align: center;
+    padding: 5rem 2rem;
+    position: relative;
+  }
+
+  .cta-section::before, .cta-section::after {
+    content: '';
+    position: absolute;
+    left: 0; right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(201,168,76,0.3), transparent);
+  }
+  .cta-section::before { top: 0; }
+  .cta-section::after { bottom: 0; }
+
+  .cta-title {
+    font-family: 'Cinzel', serif;
+    font-size: clamp(1.4rem, 3.5vw, 2.2rem);
+    font-weight: 700;
+    color: var(--white);
+    margin-bottom: 1rem;
+    line-height: 1.3;
+  }
+
+  .cta-subtitle {
+    font-size: 1rem;
+    color: var(--white-dim);
+    margin-bottom: 2.5rem;
+    line-height: 1.8;
+    max-width: 500px;
+    margin-left: auto;
+    margin-right: auto;
+    font-weight: 300;
+  }
+
+  .cta-button {
+    display: inline-block;
+    font-family: 'Cinzel', serif;
+    font-size: 0.75rem;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--black);
+    background: linear-gradient(135deg, var(--gold-light), var(--gold));
+    padding: 1rem 2.5rem;
+    text-decoration: none;
+    transition: opacity 0.3s ease, transform 0.3s ease;
+    margin: 0.5rem;
+  }
+
+  .cta-button:hover {
+    opacity: 0.85;
+    transform: translateY(-2px);
+  }
+
+  .cta-button.outline {
+    background: transparent;
+    color: var(--gold);
+    border: 1px solid var(--gold);
+  }
+
+  .cta-button.outline:hover {
+    background: rgba(201,168,76,0.08);
+    opacity: 1;
+  }
+
+  /* ── FOOTER ── */
+  footer {
+    background: var(--black);
+    text-align: center;
+    padding: 3rem 2rem;
+    position: relative;
+    z-index: 1;
+  }
+
+  .footer-logo {
+    font-family: 'Cinzel Decorative', serif;
+    font-size: 1.4rem;
+    color: var(--gold);
+    margin-bottom: 0.5rem;
+    letter-spacing: 0.1em;
+  }
+
+  .footer-tagline {
+    font-family: 'Cinzel', serif;
+    font-size: 0.65rem;
+    letter-spacing: 0.4em;
+    color: var(--gold-dim);
+    text-transform: uppercase;
+    margin-bottom: 2rem;
+  }
+
+  .footer-verse {
+    font-style: italic;
+    font-size: 0.85rem;
+    color: var(--white-dim);
+    line-height: 1.7;
+    max-width: 400px;
+    margin: 0 auto 1.5rem;
+    font-weight: 300;
+  }
+
+  .footer-ref {
+    font-family: 'Cinzel', serif;
+    font-size: 0.65rem;
+    letter-spacing: 0.2em;
+    color: var(--gold-dim);
+  }
+
+  /* ── ANIMATIONS ── */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(30px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  @keyframes scrollPulse {
+    0%, 100% { opacity: 0.4; }
+    50% { opacity: 1; }
+  }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 768px) {
+    .what-is-grid,
+    .grace-content,
+    .voice-card.featured { grid-template-columns: 1fr; }
+    .pillars-grid { grid-template-columns: 1fr; }
+    .voices-grid { grid-template-columns: 1fr; }
+    .voice-card.featured { grid-column: 1; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ── HERO ── -->
+<section class="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-lines"></div>
+  <div class="hero-content">
+    <div class="ornament">
+      <div class="ornament-line"></div>
+      <span class="ornament-symbol">✦</span>
+      <div class="ornament-line right"></div>
+    </div>
+    <p class="hero-label">Projeto Veritas • Apologética Cristã</p>
+    <h1 class="hero-title">
+      <span>A Verdade</span><br>não teme investigação.
+    </h1>
+    <p class="hero-subtitle">Cronologia · Doutrina · Apologética</p>
+    <div class="hero-verse">
+      "Estai sempre preparados para responder a qualquer um que vos pedir razão da esperança que há em vós."
+      <cite>1 Pedro 3:15 — ARC</cite>
+    </div>
+  </div>
+  <div class="scroll-indicator">
+    <span>Explorar</span>
+    <div class="scroll-arrow"></div>
+  </div>
+</section>
+
+<!-- ── O QUE É APOLOGÉTICA ── -->
+<section class="what-is">
+  <div class="container">
+    <div class="section-header">
+      <span class="section-tag">Fundamentos</span>
+      <h2 class="section-title">O que é <em>Apologética Cristã</em>?</h2>
+      <div class="section-divider"><span>✦</span></div>
+    </div>
+
+    <div class="what-is-grid">
+      <div class="what-is-text">
+        <p>A palavra vem do grego <em>apologia</em> — defesa formal diante de um tribunal. No contexto cristão, apologética é a disciplina que oferece <strong>razões intelectualmente honestas</strong> para a fé, respondendo a objeções filosóficas, históricas e científicas com rigor e respeito.</p>
+        <p>Não se trata de impor crenças, mas de demonstrar que a fé cristã não contradiz a razão — ela a <strong>convoca</strong>. O apologista acredita que a verdade não precisa de proteção: ela precisa de apresentação.</p>
+        <p>Desde os primeiros séculos, pensadores cristãos responderam às críticas de seu tempo não com silêncio ou violência, mas com <em>argumentos fundamentados</em> — filosóficos, históricos e textuais.</p>
+      </div>
+      <div class="highlight-box">
+        <blockquote>
+          "Creio para que possa entender. Não busco entender para que possa crer."
+        </blockquote>
+        <cite>— Anselmo de Cantuária (1033–1109)</cite>
+      </div>
+    </div>
+
+    <div class="pillars-grid">
+      <div class="pillar-card">
+        <div class="pillar-number">01</div>
+        <div class="pillar-title">Evidencial</div>
+        <p class="pillar-text">Examina as evidências históricas, arqueológicas e documentais que sustentam a confiabilidade das Escrituras e a historicidade da ressurreição de Cristo.</p>
+      </div>
+      <div class="pillar-card">
+        <div class="pillar-number">02</div>
+        <div class="pillar-title">Filosófica</div>
+        <p class="pillar-text">Responde às grandes questões sobre a existência de Deus, o problema do mal, a consciência humana e os fundamentos da moralidade com rigor lógico e profundidade conceitual.</p>
+      </div>
+      <div class="pillar-card">
+        <div class="pillar-number">03</div>
+        <div class="pillar-title">Comparativa</div>
+        <p class="pillar-text">Analisa o que diferentes sistemas religiosos e filosóficos ensinam, contrastando suas afirmações com o que a Bíblia revela, buscando coerência interna e consistência com a realidade.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── VOZES DA APOLOGÉTICA ── -->
+<section class="voices">
+  <div class="container">
+    <div class="section-header">
+      <span class="section-tag">Referências</span>
+      <h2 class="section-title">Vozes que <em>defenderam a fé</em></h2>
+      <div class="section-divider"><span>✦</span></div>
+    </div>
+
+    <div class="voices-grid">
+
+      <!-- C.S. Lewis — destaque -->
+      <div class="voice-card featured">
+        <div class="voice-identity">
+          <div class="voice-name">C. S. Lewis</div>
+          <div class="voice-dates">1898 — 1963</div>
+          <p class="voice-role">Professor em Oxford e Cambridge, Lewis foi um dos maiores intelectuais do século XX. Ateu convicto na juventude, converteu-se ao cristianismo após longo processo racional — e tornou-se seu mais eloquente defensor em língua inglesa.</p>
+          <span class="voice-tag">Oxford · Cambridge</span>
+        </div>
+        <div>
+          <p class="voice-quote">
+            "Não me peça para ser simples onde a realidade é complexa. O Cristianismo é uma afirmação sobre o universo real — e afirmações sobre o universo real não podem ser simplificadas sem serem distorcidas."
+          </p>
+          <p class="voice-quote" style="margin-top:1.25rem;">
+            Obras como <em>Mere Christianity</em>, <em>Miracles</em> e <em>The Problem of Pain</em> estabeleceram um padrão de rigor e clareza que ainda orienta apologistas do mundo inteiro. Lewis acreditava que a fé cristã não apenas resiste ao escrutínio racional — ela o exige.
+          </p>
+        </div>
+      </div>
+
+      <div class="voice-card">
+        <div class="voice-name">Josh McDowell</div>
+        <div class="voice-dates">1939 —</div>
+        <p class="voice-role">Estudante de direito que iniciou uma pesquisa para refutar o cristianismo — e terminou convertido ao examinar as evidências da ressurreição. Autor de <em>Evidence That Demands a Verdict</em>, obra de referência da apologética evidencial.</p>
+        <span class="voice-tag">Apologética Evidencial</span>
+        <p class="voice-quote">"Passei mais de 700 horas estudando essa evidência. Os fatos históricos exigem uma conclusão: a ressurreição aconteceu."</p>
+      </div>
+
+      <div class="voice-card">
+        <div class="voice-name">Lee Strobel</div>
+        <div class="voice-dates">1952 —</div>
+        <p class="voice-role">Editor jurídico do <em>Chicago Tribune</em> e ateu declarado, iniciou uma investigação jornalística rigorosa sobre Jesus Cristo após a conversão de sua esposa. O resultado foi sua própria conversão, documentada em <em>The Case for Christ</em>.</p>
+        <span class="voice-tag">Jornalismo · Evidências</span>
+        <p class="voice-quote">"Dei à fé o mesmo escrutínio que daria a qualquer testemunho no tribunal. As evidências não deixaram outra saída razoável."</p>
+      </div>
+
+      <div class="voice-card">
+        <div class="voice-name">William Lane Craig</div>
+        <div class="voice-dates">1949 —</div>
+        <p class="voice-role">Filósofo e teólogo com doutorados em Birmingham e Munique. Especialista em cosmologia e filosofia da religião, é conhecido por debates formais com os maiores nomes do ateísmo contemporâneo.</p>
+        <span class="voice-tag">Filosofia · Cosmologia</span>
+        <p class="voice-quote">"O universo teve um começo. Tudo que começa a existir tem uma causa. Portanto, o universo tem uma causa — e essa causa transcende o próprio espaço-tempo."</p>
+      </div>
+
+      <div class="voice-card">
+        <div class="voice-name">John Lennox</div>
+        <div class="voice-dates">1943 —</div>
+        <p class="voice-role">Matemático de Oxford com três doutorados, Lennox demonstra com precisão científica que a fé cristã e o método científico não apenas coexistem — mas que a ciência moderna nasceu dentro de um marco teísta.</p>
+        <span class="voice-tag">Ciência · Matemática · Oxford</span>
+        <p class="voice-quote">"A ciência pode nos dizer como o universo funciona. Não pode nos dizer por que ele existe — nem por que existe algo em vez de nada."</p>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ── AMAZING GRACE ── -->
+<section class="grace-section">
+  <div class="container">
+    <div class="grace-content">
+      <div class="grace-text">
+        <h3>História & Fé</h3>
+        <h2>John Newton e a graça que transforma vidas</h2>
+        <p>Poucas histórias na história do cristianismo ilustram com tanta clareza o poder transformador da fé quanto a de <strong>John Newton</strong> — o homem que escreveu <em>Amazing Grace</em>, o hino mais cantado do mundo cristão.</p>
+        <p>Newton nasceu na Inglaterra em 1725. Ainda jovem, perdeu sua mãe — uma cristã fervorosa que lhe transmitiu as primeiras noções de fé. Mas a vida no mar e as más companhias afastaram-no progressivamente de qualquer convicção religiosa.</p>
+        <p>Por décadas, Newton trabalhou no comércio de escravos no Atlântico — uma das atividades mais brutais de seu tempo. Ele próprio descreveu aquele período como o ponto mais baixo de sua existência moral. Não havia, em sua autoavaliação, pessoa mais distante de Deus do que ele.</p>
+        <p>A virada veio no Atlântico, durante uma tempestade violenta que quase naufragou seu navio em <strong>1748</strong>. Diante da iminência da morte, Newton clamou a Deus com uma oração que ele mesmo descreveu como o começo de seu retorno à fé. Não foi um processo instantâneo — foi uma conversão gradual, intelectualmente honesta, marcada por leitura, reflexão e mudança progressiva de vida.</p>
+        <p>Anos depois, ordenado ministro anglicano, Newton escreveu em <em>Amazing Grace</em> as palavras que traduzem sua própria trajetória: <em>"Fui perdido, mas fui encontrado. Era cego, mas agora vejo."</em> O hino não é apenas poesia — é autobiografia.</p>
+        <p>No final da vida, Newton tornou-se um voz ativa contra o tráfico de escravos, testemunhando perante o Parlamento britânico. Seu testemunho contribuiu para o processo de abolição. Morreu em 1807, no mesmo ano em que o tráfico foi abolido no Império Britânico.</p>
+      </div>
+
+      <div class="grace-timeline">
+        <div class="timeline-item">
+          <div class="timeline-year">1725</div>
+          <div class="timeline-title">Nascimento em Londres</div>
+          <p class="timeline-text">Filho de capitão de navio e mãe cristã, que morre quando ele tem sete anos. As primeiras sementes de fé são plantadas nessa relação.</p>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-year">1740s</div>
+          <div class="timeline-title">Anos no mar</div>
+          <p class="timeline-text">Newton ingressa na marinha e posteriormente no comércio atlântico. Descreve esse período como de abandono completo de qualquer convicção moral ou religiosa.</p>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-year">1748</div>
+          <div class="timeline-title">A tempestade</div>
+          <p class="timeline-text">Durante uma tempestade devastadora no Atlântico, Newton clama a Deus pela primeira vez em anos. Sobrevive e começa um lento processo de retorno à fé — lendo, questionando, buscando.</p>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-year">1764</div>
+          <div class="timeline-title">Ordenação e ministério</div>
+          <p class="timeline-text">Ordenado ministro anglicano em Olney, Newton começa a escrever hinos e a pregar. Torna-se mentor do poeta William Cowper, com quem publica o <em>Olney Hymns</em>.</p>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-year">1772</div>
+          <div class="timeline-title">Amazing Grace</div>
+          <p class="timeline-text">Composição do hino que narra sua própria conversão. As palavras "wretch like me" — "miserável como eu" — não são retórica: são confissão pessoal de quem se conhecia profundamente.</p>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-year">1807</div>
+          <div class="timeline-title">Legado e partida</div>
+          <p class="timeline-text">No mesmo ano em que a Inglaterra abole o tráfico de escravos — causa pela qual Newton testemunhou ativamente — ele falece, deixando uma vida que é, ela mesma, argumento apologético vivo.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── CTA ── -->
+<section class="cta-section">
+  <div class="container">
+    <p class="section-tag">Projeto Veritas</p>
+    <h2 class="cta-title">A fé cristã não pede isenção do pensamento.<br>Ela o convoca.</h2>
+    <p class="cta-subtitle">Acompanhe conteúdo de apologética com rigor histórico, fidelidade bíblica e respeito intelectual.</p>
+    <a href="https://www.instagram.com/projeto.veritas" class="cta-button" target="_blank">Seguir no Instagram</a>
+  </div>
+</section>
+
+<!-- ── FOOTER ── -->
+<footer>
+  <div class="footer-logo">Veritas Fidei</div>
+  <div class="footer-tagline">A verdade não é opinião. É revelação.</div>
+  <p class="footer-verse">"Porque a palavra de Deus é viva e eficaz, e mais penetrante do que toda a espada de dois gumes."</p>
+  <div class="footer-ref">Hebreus 4:12 — ARC</div>
+</footer>
+
+</body>
+</html>
